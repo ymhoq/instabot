@@ -1,9 +1,14 @@
 package instabot.schesa;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -26,22 +31,35 @@ public class Startup {
     // public static final String USER_DATA = "C:\\Users\\CristianP\\AppData\\Local\\Google\\Chrome\\User Data - Selenium";
     public static final String USER_DATA = "C:\\Users\\CristianP\\AppData\\Local\\Google\\Chrome\\User Data - benone";
     public static final String CHROME_DRIVER = "C:\\Users\\CristianP\\Downloads\\chromedriver_win32\\chromedriver.exe";
+    public static final String CHRONIUM_DRIVER = "C:\\Users\\CristianP\\Downloads\\chromedriver_win32 (1)\\chromedriver.exe";
     public static String[] hashTags = {
             // { "#romania", "timisoara", "#arad", "#starbucks", "#beach", "#developer", "#software", "#gymbeast"};
-             "#software", "#caseofthemondays", "#photooftheday", "#love", "#instagood", "#nofilter", "#tbt", "#picoftheday", "#instapic", "#nature", "#swag", "#lifeisgood", "#developer", "cluj", "arad county" };
-            // "epic vara"};
-            // "timisoara", "drinking", "party", "vodka", "tgif" };
-//            "Dubova, Mehedin", "constanta" };
+            // "lake ghioroc", "#motivation", "#love", "#romania", "#hackathon", "#tbt", "#picoftheday", "#instapic", "#nature", "#swag", "#lifeisgood", "#developer", "cluj", "arad county" };
+            // "Centru Timisoara", "Dubova, Mehedin"};
+            "#like4like" };
+    // "timisoara", "drinking", "party", "vodka", "tgif" };
+    // "Dubova, Mehedin", "constanta" };
     public static final int EXPLORE_POSTS = 0;
-    public static final int EXPLORE_HASHTAGS = 100;
-    public static final int UNFOLLOW_PEOPLE = 10;
+    public static final int EXPLORE_HASHTAGS = 400;
+    public static final int UNFOLLOW_PEOPLE = 0;
 
-    public static void main(String[] args) {
+    public static final ArrayList<String> tags = new ArrayList<String>();
+    static {
+        tags.add("@coddrin");
+        tags.add("@teodoraradu10");
+        tags.add("@dianaacristina");
+        tags.add("@carlabianca19");
+    }
+
+    public static void main(String[] args) throws MalformedURLException {
         // Open chrome
-        System.setProperty("webdriver.chrome.driver", CHROME_DRIVER);
+        System.setProperty("webdriver.chrome.driver", CHRONIUM_DRIVER);
+
         ChromeOptions options = new ChromeOptions();
+        // options.setBinary(CHRONIUM_DRIVER);
         options.addArguments("user-data-dir=" + USER_DATA);
         driver = new ChromeDriver(options);
+
         log.info("Going to instagram.com");
         driver.get("https://instagram.com");
         action = new Actions(driver);
@@ -51,18 +69,42 @@ public class Startup {
         // unfollow();
 
         // Go to explore
-        driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/nav/div[2]/div/div/div[3]/div/div[1]/a/span")).click();
-        addSleepSeconds(2, 4);
+        // driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/nav/div[2]/div/div/div[3]/div/div[1]/a/span")).click();
+        // addSleepSeconds(2, 4);
 
         // likeProfile("danincicau", 40);
-//         commentProfile("carlabianca19", "⊂（♡⌂♡）⊃", 146);
-//         commentProfile("andredumi", "hei cf ( ಠ‿ಠ)┘", 100);
+        // commentProfile("carlabianca19", "⊂（♡⌂♡）⊃", 146);
+        // commentProfile("andredumi", "hei cf ( ಠ‿ಠ)┘", 100);
 
-//        likeExpore();
-//
-        likeHashtags();
+        // URL tagUrl = new URL("https://www.instagram.com/p/B4R0CZQA80-/");
+        URL tagUrl = new URL("https://www.instagram.com/p/B4Ik4KgAzgX/");
+        tagInPost(tagUrl, tags, 10);
+
+        // likeExpore();
+        // likeHashtags();
 
         log.info("Done");
+    }
+
+    private static void tagInPost(URL tagUrl, ArrayList<String> tags, int times) {
+        driver.get(tagUrl.toString());
+        IntStream.range(0, times).forEach(i -> {
+            addSleepSeconds(5, 11);
+
+            WebElement we = driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/div/article/div[2]/section[3]/div/form/textarea"));
+            we.click();
+            WebElement input = driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/div/article/div[2]/section[3]/div/form/textarea"));
+            input.clear();
+            addSleepSeconds(2, 4);
+            tags.forEach(tag -> {
+                input.sendKeys(tag);
+                addSleepSeconds(0, 1);
+                input.sendKeys(Keys.SPACE);
+                addSleepSeconds(2, 4);
+            });
+            input.sendKeys(Keys.TAB);
+            input.sendKeys(Keys.RETURN);
+        });
     }
 
     private static void commentProfile(String profile, String comment, int posts) {
@@ -177,8 +219,9 @@ public class Startup {
         // Get random picture and hover
         // TODO get images that are actually posts
         List<WebElement> lwe = driver.findElements(By.tagName("img"));
+        lwe = lwe.stream().filter(we -> we.getSize().width > 200).collect(Collectors.toList());
         // int index = getRandom(offset, lwe.size());
-        int index = getRandom(10, 15);
+        int index = getRandom(1, 1);
         WebElement we = lwe.get(index);
         action.moveToElement(we).build().perform();
         addSleepSeconds(2, 3);
@@ -194,7 +237,7 @@ public class Startup {
             addSleepSeconds(0, 1);
             we = driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/nav/div[2]/div/div/div[2]/input"));
             we.sendKeys(hashtag);
-            addSleepSeconds(1, 2);
+            addSleepSeconds(2, 2);
             we.sendKeys(Keys.ARROW_DOWN);
             we.sendKeys(Keys.RETURN);
             addSleepSeconds(2, 4);
@@ -216,8 +259,8 @@ public class Startup {
     private static void pressX() {
         addSleepSeconds(1, 1);
         try {
-        driver.findElement(By.xpath("/html/body/div[3]/button[1]")).click();
-        } catch(Throwable t) {
+            driver.findElement(By.xpath("/html/body/div[3]/button[1]")).click();
+        } catch (Throwable t) {
             driver.findElement(By.xpath("/html/body/div[2]/button[1]")).click();
         }
         addSleepSeconds(1, 2);
@@ -227,13 +270,10 @@ public class Startup {
         try {
             for (int i = 0; i < posts; i++) {
                 addSleepSeconds(2, 4);
-                if (getRandom(0, 100) > 10)
-                    likePost();
-                if (getRandom(0, 100) < 2)
-                    addSleepSeconds(1, 100);
+                if (getRandom(0, 100) > 10) likePost();
+                if (getRandom(0, 100) < 2) addSleepSeconds(1, 100);
                 addSleepSeconds(2, 3);
-                if (i != posts - 1)
-                    nextPost();
+                if (i != posts - 1) nextPost();
             }
         } catch (Throwable t) {
             System.out.println("iteratePosts-  " + t);
@@ -269,8 +309,7 @@ public class Startup {
     }
 
     public static int getRandom(int low, int high) {
-        if (low == high)
-            return low;
+        if (low == high) return low;
         Random r = new Random();
         return r.nextInt(high - low) + low;
     }
