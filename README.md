@@ -1,5 +1,7 @@
 # Instagram bot
+[About](#About) | [Usage](#usage)| [Installation](#installation)
 
+## About
 * like random posts from discovery
 * like posts from a profile
 * add multiple comments to a post 
@@ -50,4 +52,4 @@ URL tagUrl = new URL("https://www.instagram.com/p/CAlFTzTJl4f/");
 // tagInPost(postUrl, tags, times);
 tagInPost(tagUrl, tags, 10);
 ```
-## Instalation
+## Installation
