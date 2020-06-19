@@ -36,7 +36,8 @@ likeExpore(); //like 100 posts from explore
 ```
 Like 20% of EXPLORE_HASHTAGS posts from hashtags/ locations
 ```java
-   public static String[] hashTags = { "#romania", "timisoara", "#arad", "#beach", "#developer", "#software", "#gymbeast" "party", "vodka" };
+ public static String[] hashTags = { "#romania", "timisoara", "#arad", "#beach", "#developer", "#software", "#gymbeast" "party", "vodka" };
+ 
 public static final int EXPLORE_HASHTAGS = 400;
 likeHashtags(); // iterate over 400 posts for each hashTag
 ```
@@ -61,5 +62,5 @@ public static final String CHRONIUM_DRIVER = "C:\\Users\\User\\Downloads\\chrome
 ```
 Export from chrome **User data**, having instagram account logged on, and set the path
 ```java
-    public static final String USER_DATA = "C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data - profile";
+public static final String USER_DATA = "C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data - profile";
 ```
