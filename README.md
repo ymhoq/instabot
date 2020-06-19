@@ -38,4 +38,16 @@ Like 20% of EXPLORE_HASHTAGS posts from hashtags/ locations
 public static final int EXPLORE_HASHTAGS = 400;
 likeHashtags(); // iterate over 400 posts for each hashTag
 ```
+Tag people in a post many times
+```java
+ public static final ArrayList<String> tags = new ArrayList<String>();
+ static {
+     tags.add("@teodoraradu10");
+     tags.add("@carlabianca19");
+ }
+URL tagUrl = new URL("https://www.instagram.com/p/CAlFTzTJl4f/");
+
+// tagInPost(postUrl, tags, times);
+tagInPost(tagUrl, tags, 10);
+```
 ## Instalation
