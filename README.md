@@ -9,7 +9,12 @@
 
 Like posts on a profile
 ```java
-likeProfile(account, times);
+// likeProfile(account, times);
+likeProfile("chesa.sebastian", 26);
 ```
-
+Leave comments on a profile
+```java
+// commentProfile(account, message, times);
+commentProfile("chesa.sebastian", "heyo ( ಠ‿ಠ)┘", 100);
+```
 ## Instalation
