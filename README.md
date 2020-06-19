@@ -1,5 +1,5 @@
 # Instagram bot
-[About](#About) | [Usage](#usage)| [Installation](#installation)
+[About](#About) | [Usage](#usage) | [Installation](#installation)
 
 ## About
 * like random posts from discovery
@@ -53,3 +53,13 @@ URL tagUrl = new URL("https://www.instagram.com/p/CAlFTzTJl4f/");
 tagInPost(tagUrl, tags, 10);
 ```
 ## Installation
+
+Install **chrome driver** and set the path
+
+```java
+public static final String CHRONIUM_DRIVER = "C:\\Users\\User\\Downloads\\chromedriver_win32\\chromedriver.exe";
+```
+Export from chrome **User data**, having instagram account logged on, and set the path
+```java
+    public static final String USER_DATA = "C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data - profile";
+```
