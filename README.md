@@ -1,4 +1,4 @@
-# Instagram bot
+# :camera_flash: I Instagram bot
 [About](#About) | [Usage](#usage) | [Installation](#installation)
 
 ## About
