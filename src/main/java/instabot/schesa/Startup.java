@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -24,31 +24,48 @@ import org.openqa.selenium.interactions.Actions;
  *
  */
 public class Startup {
-    static Logger log = Logger.getGlobal();
+    static Logger log = Logger.getLogger(Startup.class);
 
     public static WebDriver driver;
     public static Actions action;
     // public static final String USER_DATA = "C:\\Users\\CristianP\\AppData\\Local\\Google\\Chrome\\User Data - Selenium";
     public static final String USER_DATA = "C:\\Users\\CristianP\\AppData\\Local\\Google\\Chrome\\User Data - benone";
     public static final String CHROME_DRIVER = "C:\\Users\\CristianP\\Downloads\\chromedriver_win32\\chromedriver.exe";
-    public static final String CHRONIUM_DRIVER = "C:\\Users\\CristianP\\Downloads\\chromedriver_win32 (1)\\chromedriver.exe";
+    public static final String CHRONIUM_DRIVER = "C:\\Users\\CristianP\\Downloads\\chromedriver.exe";
     public static String[] hashTags = {
             // { "#romania", "timisoara", "#arad", "#starbucks", "#beach", "#developer", "#software", "#gymbeast"};
             // "lake ghioroc", "#motivation", "#love", "#romania", "#hackathon", "#tbt", "#picoftheday", "#instapic", "#nature", "#swag", "#lifeisgood", "#developer", "cluj", "arad county" };
             // "Centru Timisoara", "Dubova, Mehedin"};
-            "#like4like" };
+            // "#gsdofinstagram", "#gsdlove", "#gsdpuppy", "#gsddogsofinstagram", "#gsdpage", "#gsdsofigworld", "#gsdsofinstagram", "#GSDLover", "#gsdofinsta", "#gsdlife", "#gsdmix", "#gsdlovers", "#gsds", "#gsddaily",
+            // "#gsdofigworld", "#gsdmalinoislove", "#gsdcloudy", "#gsdforlife", "#gsdworld", "#gsdpuppies", "#gsdloversofinsta", "#gsdloverstagram", "#gsdvideo", "#gsdsoftheworld", "#gsd4life", "#gsdpost" };
+            // "#brittishshorthair" };
+            // "#dogstagram ",
+            // "#brittishshorthair", "#scottishfold", "#beagle", "#germanshepherd" };
+            // "#gym",
+            // "#computerscience", "Buckingham Palace Garden road" };
+            // "#legsday", "#rainylondon",
+            "#dogsoflondon", "#catsofromania", "#cardiotime" };
     // "timisoara", "drinking", "party", "vodka", "tgif" };
     // "Dubova, Mehedin", "constanta" };
     public static final int EXPLORE_POSTS = 0;
-    public static final int EXPLORE_HASHTAGS = 400;
+
+    public static final int EXPLORE_HASHTAGS = 70;
+    public static final int LIKE_PROBABILITY = 40;
+    /**
+     * Used to put a sleep between hashtag likes
+     */
+    // public static final int[] INTERVAL = new int[] { 1000, 1300 };
+    // public static final int[] INTERVAL = new int[] { 3600, 5400 };
+    public static final int[] INTERVAL = new int[] { 3600, 10800 };
+
     public static final int UNFOLLOW_PEOPLE = 0;
+    public static final String LIKED_TEXT = "Nu-mi mai place";
 
     public static final ArrayList<String> tags = new ArrayList<String>();
     static {
         tags.add("@coddrin");
         tags.add("@teodoraradu10");
         tags.add("@dianaacristina");
-        tags.add("@carlabianca19");
     }
 
     public static void main(String[] args) throws MalformedURLException {
@@ -77,15 +94,16 @@ public class Startup {
         // commentProfile("andredumi", "hei cf ( ಠ‿ಠ)┘", 100);
 
         // URL tagUrl = new URL("https://www.instagram.com/p/B4R0CZQA80-/");
-        URL tagUrl = new URL("https://www.instagram.com/p/B4Ik4KgAzgX/");
-        tagInPost(tagUrl, tags, 10);
+        // URL tagUrl = new URL("https://www.instagram.com/p/B4Ik4KgAzgX/");
+        // tagInPost(tagUrl, tags, 10);
 
         // likeExpore();
         // likeHashtags();
-
+        likeRecentHashtags();
         log.info("Done");
     }
 
+    @SuppressWarnings("unused")
     private static void tagInPost(URL tagUrl, ArrayList<String> tags, int times) {
         driver.get(tagUrl.toString());
         IntStream.range(0, times).forEach(i -> {
@@ -107,6 +125,7 @@ public class Startup {
         });
     }
 
+    @SuppressWarnings("unused")
     private static void commentProfile(String profile, String comment, int posts) {
         log.info("Entering profile " + profile);
         addSleepSeconds(0, 2);
@@ -141,6 +160,7 @@ public class Startup {
         }
     }
 
+    @SuppressWarnings("unused")
     private static void unfollow() {
         // Go to profile
         driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/nav/div[2]/div/div/div[3]/div/div[3]/a/span")).click();
@@ -170,6 +190,7 @@ public class Startup {
         driver.findElement(By.xpath("/html/body/div[3]/div/div[1]/div/div[2]/button")).click();
     }
 
+    @SuppressWarnings("unused")
     private static void likeProfile(String profile, int likes) {
         log.info("Entering profile " + profile);
         addSleepSeconds(0, 2);
@@ -214,6 +235,20 @@ public class Startup {
         }
     }
 
+    private static WebElement hoverRandomRecentPicture() {
+        addSleepSeconds(2, 3);
+        // Get random picture and hover
+        // TODO get images that are actually posts
+        List<WebElement> lwe = driver.findElements(By.tagName("img"));
+        lwe = lwe.stream().filter(we -> we.getSize().width > 250 && we.getSize().height > 250).collect(Collectors.toList());
+        // int index = getRandom(offset, lwe.size());
+        int index = getRandom(lwe.size() - 7, lwe.size() - 2);
+        WebElement we = lwe.get(index);
+        action.moveToElement(we).build().perform();
+        addSleepSeconds(2, 3);
+        return we;
+    }
+
     private static WebElement hoverRandomPicture(int offset) {
         addSleepSeconds(2, 3);
         // Get random picture and hover
@@ -228,10 +263,10 @@ public class Startup {
         return we;
     }
 
-    private static void likeHashtags() {
+    private static void likeRecentHashtags() {
         for (String hashtag : hashTags) {
-            log.info("Likes for " + hashtag);
-            addSleepSeconds(1, 2);
+            log.info("Starting likes for hashtag " + hashtag);
+            addSleepSeconds(2, 3);
             WebElement we = driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/nav/div[2]/div/div/div[2]/div/div"));
             we.click();
             addSleepSeconds(0, 1);
@@ -241,8 +276,38 @@ public class Startup {
             we.sendKeys(Keys.ARROW_DOWN);
             we.sendKeys(Keys.RETURN);
             addSleepSeconds(2, 4);
-            likeFeed(90);
+            likeRecentFeed();
+            addSleepSeconds(INTERVAL[0], INTERVAL[1]);
         }
+    }
+
+    @SuppressWarnings("unused")
+    private static void likeHashtags() {
+        for (String hashtag : hashTags) {
+            log.info("Likes for " + hashtag);
+            addSleepSeconds(1, 2);
+            WebElement we = driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/nav/div[2]/div/div/div[2]/div/div"));
+            we.click();
+            addSleepSeconds(0, 1);
+            we = driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/nav/div[2]/div/div/div[2]/input"));
+            we.sendKeys(hashtag);
+            addSleepSeconds(2, 3);
+            we.sendKeys(Keys.ARROW_DOWN);
+            we.sendKeys(Keys.RETURN);
+            addSleepSeconds(2, 4);
+            likeFeed(1);
+        }
+    }
+
+    private static void likeRecentFeed() {
+        WebElement we = hoverRandomRecentPicture();
+        // click picture
+        JavascriptExecutor executor = (JavascriptExecutor) driver;
+        executor.executeScript("arguments[0].click();", we);
+        addSleepSeconds(4, 5);
+
+        iteratePosts(EXPLORE_HASHTAGS);
+        pressX();
     }
 
     private static void likeFeed(int offset) {
@@ -259,25 +324,32 @@ public class Startup {
     private static void pressX() {
         addSleepSeconds(1, 1);
         try {
-            driver.findElement(By.xpath("/html/body/div[3]/button[1]")).click();
+            driver.findElement(By.xpath("/html/body/div[4]/div[3]/button")).click();
         } catch (Throwable t) {
-            driver.findElement(By.xpath("/html/body/div[2]/button[1]")).click();
+            driver.findElement(By.xpath("/html/body/div[4]/divs[2]/button")).click();
         }
         addSleepSeconds(1, 2);
     }
 
     private static void iteratePosts(int posts) {
+        int likes = 0, i = 0;
         try {
-            for (int i = 0; i < posts; i++) {
+            for (i = 0; i < posts; i++) {
                 addSleepSeconds(2, 4);
-                if (getRandom(0, 100) > 10) likePost();
+                addSleepSeconds(2, 4);
+                if (getRandom(0, 100) > (100 - LIKE_PROBABILITY)) {
+                    likePost();
+                    likes++;
+                }
                 if (getRandom(0, 100) < 2) addSleepSeconds(1, 100);
                 addSleepSeconds(2, 3);
                 if (i != posts - 1) nextPost();
             }
         } catch (Throwable t) {
-            System.out.println("iteratePosts-  " + t);
             return;
+        } finally {
+            log.info("Iterated over " + i + " posts");
+            log.info("Liked " + likes + " posts");
         }
     }
 
@@ -290,12 +362,12 @@ public class Startup {
 
     public static void nextPost() {
         try {
-            WebElement element = driver.findElement(By.xpath("/html/body/div[3]/div[1]/div/div/a[2]"));
+            WebElement element = driver.findElement(By.xpath("/html/body/div[4]/div[1]/div/div/a[2]"));
             action.click(element).perform();
         } catch (Throwable t1) {
             try {
                 // different xpath if it's the first post
-                WebElement element = driver.findElement(By.xpath("/html/body/div[3]/div[1]/div/div/a"));
+                WebElement element = driver.findElement(By.xpath("/html/body/div[4]/div[1]/div/div/a"));
                 action.click(element).perform();
             } catch (Throwable t2) {
                 // last post
@@ -304,8 +376,28 @@ public class Startup {
     }
 
     public static void likePost() {
-        WebElement element = driver.findElement(By.xpath("/html/body/div[3]/div[2]/div/article/div[1]/div"));
-        action.doubleClick(element).perform();
+        WebElement element;
+        boolean liked = false;
+        try {
+            element = driver.findElement(By.xpath("/html/body/div[4]/div[2]/div/article/div[3]/section[1]/span[1]/button/div/span"));
+            liked = element.getAttribute("innerHTML").contains(LIKED_TEXT);
+            if (liked) return;
+        } catch (Throwable t) {
+            log.error("Could not get like info", t);
+        }
+        // try {
+        // element = driver.findElement(By.xpath("/html/body/div[4]/div[2]/div/article/div[2]/div/div/div[1]/div[2]"));
+        // action.doubleClick(element).perform();
+        // } catch (Throwable t1) {
+        // try {
+        // element = driver.findElement(By.xpath("/html/body/div[4]/div[2]/div/article/div[2]/div/div/div[3]"));
+        // action.doubleClick(element).perform();
+        // action.doubleClick(element).perform();
+        // } catch (Throwable t2) {
+        element = driver.findElement(By.xpath("/html/body/div[4]/div[2]/div/article/div[3]/section[1]/span[1]/button"));
+        action.click(element).perform();
+        // }
+        // }
     }
 
     public static int getRandom(int low, int high) {
@@ -316,7 +408,9 @@ public class Startup {
 
     private static void addSleepSeconds(int s1, int s2) {
         try {
-            Thread.sleep(getRandom(s1 * 1000, s2 * 1000));
+            int s = getRandom(s1 * 1000, s2 * 1000);
+            log.info("Sleeping " + s / 1000 + "s");
+            Thread.sleep(s);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
