@@ -32,31 +32,46 @@ public class Startup {
     public static final String USER_DATA = "C:\\Users\\CristianP\\AppData\\Local\\Google\\Chrome\\User Data - benone";
     public static final String CHROME_DRIVER = "C:\\Users\\CristianP\\Downloads\\chromedriver_win32\\chromedriver.exe";
     public static final String CHRONIUM_DRIVER = "C:\\Users\\CristianP\\Downloads\\chromedriver.exe";
+    //@formatter:off
     public static String[] hashTags = {
-            // { "#romania", "timisoara", "#arad", "#starbucks", "#beach", "#developer", "#software", "#gymbeast"};
-            // "lake ghioroc", "#motivation", "#love", "#romania", "#hackathon", "#tbt", "#picoftheday", "#instapic", "#nature", "#swag", "#lifeisgood", "#developer", "cluj", "arad county" };
-            // "Centru Timisoara", "Dubova, Mehedin"};
-            // "#gsdofinstagram", "#gsdlove", "#gsdpuppy", "#gsddogsofinstagram", "#gsdpage", "#gsdsofigworld", "#gsdsofinstagram", "#GSDLover", "#gsdofinsta", "#gsdlife", "#gsdmix", "#gsdlovers", "#gsds", "#gsddaily",
-            // "#gsdofigworld", "#gsdmalinoislove", "#gsdcloudy", "#gsdforlife", "#gsdworld", "#gsdpuppies", "#gsdloversofinsta", "#gsdloverstagram", "#gsdvideo", "#gsdsoftheworld", "#gsd4life", "#gsdpost" };
-            // "#brittishshorthair" };
-            // "#dogstagram ",
-            // "#brittishshorthair", "#scottishfold", "#beagle", "#germanshepherd" };
-            // "#gym",
-            // "#computerscience", "Buckingham Palace Garden road" };
-            // "#legsday", "#rainylondon",
-            "#dogsoflondon", "#catsofromania", "#cardiotime" };
-    // "timisoara", "drinking", "party", "vodka", "tgif" };
-    // "Dubova, Mehedin", "constanta" };
+            "#malinois",
+            "#graduation",
+            "#gsdofinstagram", "#dogstagram",
+            "Bucharest, Romania",
+            "#puma",
+            "#gym",
+            "#scottishfold", 
+            "#gymgirl",
+            "timisoara", "drinking", "party", "vodka", "tgif", 
+            "Dubova, Mehedin", "constanta",
+            "#computerscience", "Buckingham Palace Garden road", 
+            "#balkan", 
+            "#catsofromania", "#cardiotime" ,
+            "lake ghioroc", "#motivation", "#loveyourselffirst", "#rainylondon", "#hackathon", "#exporeromania", 
+            "#lifeisgooduphere", "#developer", "cluj", "arad county",
+            "#dogsoflondon", 
+            "#painonlegsday",
+            "Centru Timisoara", "Dubova, Mehedin",
+            "#guarddogs", "#gsdofinstagram", "#k9dog",
+            "#aggressiontraining", "#malinois", "#k9", 
+            "#brittishshorthair", "#beagle", "#germanshepherd",
+            "#romania", "timisoara", "#arad", "#starbucks", "#beach", "#developer", "#software", "#gymbeast",
+        };
+     //@formatter:on    
     public static final int EXPLORE_POSTS = 0;
 
-    public static final int EXPLORE_HASHTAGS = 70;
-    public static final int LIKE_PROBABILITY = 40;
+    public static final int EXPLORE_HASHTAGS = 130;
+    public static final int LIKE_PROBABILITY = 80;
+
+    // public static final int EXPLORE_HASHTAGS = 50;
+    // public static final int LIKE_PROBABILITY = 50;
     /**
      * Used to put a sleep between hashtag likes
      */
-    // public static final int[] INTERVAL = new int[] { 1000, 1300 };
+    public static final int[] INTERVAL = new int[] { 800, 1500 };
     // public static final int[] INTERVAL = new int[] { 3600, 5400 };
-    public static final int[] INTERVAL = new int[] { 3600, 10800 };
+    // public static final int[] INTERVAL = new int[] { 3600, 10800 };
+    // public static final int[] INTERVAL = new int[] { 1000, 10800 };
 
     public static final int UNFOLLOW_PEOPLE = 0;
     public static final String LIKED_TEXT = "Nu-mi mai place";
@@ -269,10 +284,10 @@ public class Startup {
             addSleepSeconds(2, 3);
             WebElement we = driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/nav/div[2]/div/div/div[2]/div/div"));
             we.click();
-            addSleepSeconds(0, 1);
+            addSleepSeconds(1, 2);
             we = driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/nav/div[2]/div/div/div[2]/input"));
             we.sendKeys(hashtag);
-            addSleepSeconds(2, 2);
+            addSleepSeconds(2, 3);
             we.sendKeys(Keys.ARROW_DOWN);
             we.sendKeys(Keys.RETURN);
             addSleepSeconds(2, 4);
@@ -409,7 +424,7 @@ public class Startup {
     private static void addSleepSeconds(int s1, int s2) {
         try {
             int s = getRandom(s1 * 1000, s2 * 1000);
-            log.info("Sleeping " + s / 1000 + "s");
+            if (s / 1000 > 5) log.info("Sleeping " + s / 1000 + "s");
             Thread.sleep(s);
         } catch (InterruptedException e) {
             e.printStackTrace();
