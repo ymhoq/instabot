@@ -28,10 +28,10 @@ public class Startup {
 
     public static WebDriver driver;
     public static Actions action;
-    // public static final String USER_DATA = "C:\\Users\\CristianP\\AppData\\Local\\Google\\Chrome\\User Data - Selenium";
-    public static final String USER_DATA = "C:\\Users\\CristianP\\AppData\\Local\\Google\\Chrome\\User Data - benone";
-    public static final String CHROME_DRIVER = "C:\\Users\\CristianP\\Downloads\\chromedriver_win32\\chromedriver.exe";
-    public static final String CHRONIUM_DRIVER = "C:\\Users\\CristianP\\Downloads\\chromedriver.exe";
+    // public static final String USER_DATA = "C:\\Users\\Professional\\AppData\\Local\\Google\\Chrome\\User Data - Selenium";
+    public static final String USER_DATA = "C:\\Users\\Professional\\AppData\\Local\\Google\\Chrome\\User Data - benone";
+    public static final String CHROME_DRIVER = "C:\\Users\\Professional\\Downloads\\chromedriver.exe";
+    public static final String CHRONIUM_DRIVER = "C:\\Users\\Professional\\Downloads\\chromedriver.exe";
     //@formatter:off
     public static String[] hashTags = {
             "#malinois",
@@ -87,24 +87,26 @@ public class Startup {
         // Open chrome
         System.setProperty("webdriver.chrome.driver", CHRONIUM_DRIVER);
 
-        ChromeOptions options = new ChromeOptions();
+        //ChromeOptions options = new ChromeOptions();
         // options.setBinary(CHRONIUM_DRIVER);
-        options.addArguments("user-data-dir=" + USER_DATA);
-        driver = new ChromeDriver(options);
+        //options.addArguments("user-data-dir=" + USER_DATA);
+        driver = new ChromeDriver();
 
         log.info("Going to instagram.com");
         driver.get("https://instagram.com");
         action = new Actions(driver);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         addSleepSeconds(0, 1);
+ logIn("","");
+
 
         // unfollow();
 
         // Go to explore
         // driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/nav/div[2]/div/div/div[3]/div/div[1]/a/span")).click();
-        // addSleepSeconds(2, 4);
+         addSleepSeconds(2, 4);
 
-        // likeProfile("danincicau", 40);
+         likeProfile("danincicau", 40);
         // commentProfile("carlabianca19", "⊂（♡⌂♡）⊃", 146);
         // commentProfile("andredumi", "hei cf ( ಠ‿ಠ)┘", 100);
 
@@ -114,11 +116,27 @@ public class Startup {
 
         // likeExpore();
         // likeHashtags();
-        likeRecentHashtags();
+        //likeRecentHashtags();
         log.info("Done");
     }
 
-    @SuppressWarnings("unused")
+    private static void logIn(String username, String pass) {
+        WebElement logname = driver.findElement(By.xpath("//*[@id=\"loginForm\"]/div/div[1]/div/label"));
+        logname.sendKeys("fylend@gmail.com");
+
+        WebElement logpass = driver.findElement(By.xpath("//*[@id=\"loginForm\"]/div/div[2]/div/label"));
+    logpass.sendKeys("pigamama1");
+
+        WebElement logBtn = driver.findElement(By.xpath("//*[@id=\"loginForm\"]/div/div[3]/button/div"));
+logBtn.click();
+      addSleepSeconds(0, 2);
+        WebElement noSpov = driver.findElement(By.xpath("/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[3]/button[2]"));
+        noSpov.click();
+
+    }
+
+
+        @SuppressWarnings("unused")
     private static void tagInPost(URL tagUrl, ArrayList<String> tags, int times) {
         driver.get(tagUrl.toString());
         IntStream.range(0, times).forEach(i -> {
@@ -208,11 +226,11 @@ public class Startup {
     @SuppressWarnings("unused")
     private static void likeProfile(String profile, int likes) {
         log.info("Entering profile " + profile);
-        addSleepSeconds(0, 2);
-        WebElement we = driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/nav/div[2]/div/div/div[2]/div/div"));
+        addSleepSeconds(0, 5);
+        WebElement we = driver.findElement(By.xpath("//*[@id=\"mount_0_0_3T\"]/div/div[1]/div/div[1]/div/div/div/div[1]/div[1]/section/nav/div[2]/div/div/div[2]"));
         we.click();
         addSleepSeconds(0, 1);
-        we = driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/nav/div[2]/div/div/div[2]/input"));
+        we = driver.findElement(By.xpath("//*[@id=\"mount_0_0_xK\"]/div/div[1]/div/div[1]/div/div/div/div[1]/div[1]/section/nav/div[2]/div/div/div[2]"));
         we.sendKeys(profile);
         addSleepSeconds(1, 2);
         we.sendKeys(Keys.RETURN);
